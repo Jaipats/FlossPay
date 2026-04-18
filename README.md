@@ -20,7 +20,7 @@
 
 
 **FlossPay** is a **Kernel-inspired**, **enterprise-grade** Free/Libre Open-Source payments aggregator.
-Modeled after **Linux’s** rigorous governance (meritocratic maintainership, strict code review, transparent changelogs) and **Oracle Financials** audit-first architecture (immutable ledgers, compliance-ready schemas), **FlossPay** delivers bank  reliability to indie merchants, MSMEs, and developers.
+Modeled after **Linux's** rigorous governance (meritocratic maintainership, strict code review, transparent changelogs) and **Oracle Financials** audit-first architecture (immutable ledgers, compliance-ready schemas), **FlossPay** delivers bank  reliability to indie merchants, MSMEs, and developers.
 With a community-driven ethos, FlossPay removes barriers and empowers small businesses with open, transparent infrastructure.
 
 > **Current Rail Availability**: _v0.2-alpha offers a hardened **UPI rail**, fully tested and validated; downstream rails (cards, wallets, net-banking) are tracked via stable branches and will not affect core stability._
@@ -31,17 +31,17 @@ With a community-driven ethos, FlossPay removes barriers and empowers small busi
 
 ### Vision
 
-Empowers indie merchants, MSMEs, and developers with Payment infrastructure which is **Open**, **Transparent**, and **Accessable**.
+Empowers indie merchants, MSMEs, and developers with Payment infrastructure which is **Open**, **Transparent**, and **Accessible**.
 
 ### Mission
 
-Deliver an **Auditable**, **Modular**, **Self-hostable** payments platform that delivers Bank-Grade **Reliabilitys** while remaining **FLOSS**.
+Deliver an **Auditable**, **Modular**, **Self-hostable** payments platform that delivers Bank-Grade **Reliability** while remaining **FLOSS**.
 
 ---
 
 # ⚠️ **Legal Notice**
 
-> **This software is provided “AS IS” and “AS AVAILABLE” — with _NO WARRANTY_ of any kind.**
+> **This software is provided "AS IS" and "AS AVAILABLE" — with _NO WARRANTY_ of any kind.**
 >
 > By accessing, using, modifying, or distributing this project, you AGREE that:
 >
@@ -71,6 +71,7 @@ Deliver an **Auditable**, **Modular**, **Self-hostable** payments platform that 
 12. [📚 Documentation Suite (Enterprise Roadmap)](#-documentation-suite-enterprise-roadmap)
 13. [Community & Support](#community--security)
 14. [License & Maintainers](#license--maintainers)
+15. [Known Issues & Technical Debt](#known-issues--technical-debt)
 
 ---
 
@@ -242,7 +243,7 @@ Every branch solves a regulated production concern: **security, reliability, aud
 Structure is strictly modeled after Stripe, AWS, Linux Foundation, and PCI/SOC2 best practices—**no ambiguity**.
 
 - **Idempotency, Circuit Breaker, HMAC Auth, Audit Trail:** Not just features—**compliance-first controls** as per open standards (RFCs, ISO, PCI-DSS).
-- **TestOps:** Adversarial, not just “happy path.” Mutation, chaos, and soak by default.
+- **TestOps:** Adversarial, not just "happy path." Mutation, chaos, and soak by default.
 - **API Hardening:** Replay resistance, input validation, and fraud-abuse defense for fintech trust.
 - **Documentation:** Complete onboarding, regulatory, and audit evidence.
 - **OSS & Community:** PR/issue hygiene, code of conduct, full transparency.
@@ -256,7 +257,7 @@ _Powered by enterprise-grade security and compliance to match Oracle-level stand
 
 ## FlossPay: Security, Reliability & Compliance Matrix
 
-> All features below are engineered for **compliance-by-default**, auditability, and absolute determinism. Controls are **FLOSS-auditable**; no “checkbox” security or black-box behaviors.
+> All features below are engineered for **compliance-by-default**, auditability, and absolute determinism. Controls are **FLOSS-auditable**; no "checkbox" security or black-box behaviors.
 
 | **Control Area**            | **Mechanism & Enforcement**                                                                                                                                                                                                                                                   | **Standard / Reference**                                                                                             | **Status**                  |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------- |
@@ -323,12 +324,12 @@ _References hyperlinked. Each control and mechanism is FLOSS-auditable, designed
 
 | Focus Area              | Branch (`TestOps/---`)        | Deliverable / Action                                                     | Industry Benchmark / Standard        | How It Signals Production Readiness                  |
 | ----------------------- | ----------------------------- | ------------------------------------------------------------------------ | ------------------------------------ | ---------------------------------------------------- |
-| **Unit Testing**        | `TestOps/unit`                | 85%+ branch/mutation coverage (PIT); strict CI gate                      | Stripe/Oracle: “green bar” required  | Prevents regressions at code-level; enforces safety  |
+| **Unit Testing**        | `TestOps/unit`                | 85%+ branch/mutation coverage (PIT); strict CI gate                      | Stripe/Oracle: "green bar" required  | Prevents regressions at code-level; enforces safety  |
 | **Integration Testing** | `TestOps/integration`         | Testcontainers: boot Postgres+Redis, full API↔worker↔DB flows            | AWS/Uber: live DB+queue in CI        | Proves real service, DB, and queue integration       |
 | **E2E Scenarios**       | `TestOps/e2e`                 | Gatling/k6: `/pay→/status`, `/collect→/status`, retry+DLQ+timeout        | PayPal/Stripe: payment edge QA       | Simulates real user & failure edge-cases             |
-| **Performance Testing** | `TestOps/performance_metrics` | Load/soak: 100–1,000 TPS; latency, error rates logged (CI or local)      | AWS: cloud perf/SRE pipelines        | Certifies scale: “cloud-ready” throughput            |
-| **Mock Services**       | `TestOps/mocks`               | Deterministic mocks: UPI, NPCI, 3rd-party rails; error & chaos injection | Fintech: “blast radius”/failure test | Guarantees failover, never silent fail               |
-| **Edge Case Tracking**  | `TestOps/issues`              | Every regression/non-happy-path scenario tracked & test-locked           | Google: post-mortem QA discipline    | “No unexplained bugs”—all failures are accounted for |
+| **Performance Testing** | `TestOps/performance_metrics` | Load/soak: 100–1,000 TPS; latency, error rates logged (CI or local)      | AWS: cloud perf/SRE pipelines        | Certifies scale: "cloud-ready" throughput            |
+| **Mock Services**       | `TestOps/mocks`               | Deterministic mocks: UPI, NPCI, 3rd-party rails; error & chaos injection | Fintech: "blast radius"/failure test | Guarantees failover, never silent fail               |
+| **Edge Case Tracking**  | `TestOps/issues`              | Every regression/non-happy-path scenario tracked & test-locked           | Google: post-mortem QA discipline    | "No unexplained bugs"—all failures are accounted for |
 | **Advanced Error**      | `TestOps/error_handling`      | DLQ/circuit breaker simulation, alerting/telemetry flows                 | PCI-DSS/SOC2: financial compliance   | No data loss on fail; audit & alert tested           |
 | **Observability**       | `TestOps/observability`       | Prometheus metrics, Grafana dashboards, alert configs                    | SRE: cloud-native monitoring         | SLOs and error rates are test-verified               |
 
@@ -373,11 +374,58 @@ _References hyperlinked. Each control and mechanism is FLOSS-auditable, designed
 
 ---
 
+## Known Issues & Technical Debt
+
+> **⚠️ CRITICAL**: The following issues must be addressed before production deployment. This table is automatically updated as issues are discovered and resolved.
+
+| ID | Severity | Category | Issue Description | Location | Impact | Recommended Fix | Status |
+|:---|:---------|:---------|:------------------|:---------|:-------|:----------------|:-------|
+| **SEC-001** | 🔴 **Critical** | Security | Hardcoded HMAC secret key in source code | `api-service/src/main/java/com/openpay/api/security/HmacAuthService.java:28` | Anyone with code access can forge signatures; violates PCI-DSS req 3.6 | Inject secret via environment variable or vault (AWS KMS/HashiCorp Vault) | 🔴 Open |
+| **CFG-001** | 🔴 **Critical** | Configuration | Missing database connection configuration | `api-service/src/main/resources/application.properties` | Application cannot connect to PostgreSQL; will fail on startup | Add `spring.datasource.url`, `username`, `password`, `driver-class-name` | 🔴 Open |
+| **CFG-002** | 🔴 **Critical** | Configuration | Missing Redis connection configuration | `api-service/src/main/resources/application.properties` | Cannot enqueue transactions to Redis Streams; async pipeline broken | Add `spring.redis.host`, `port`, `password` | 🔴 Open |
+| **CFG-003** | 🔴 **Critical** | Configuration | Worker service has no application.properties | `worker-service/src/main/resources/` | Worker cannot start without DB/Redis configs | Create `application.properties` with datasource and redis configs | 🔴 Open |
+| **CI-001** | 🔴 **Critical** | CI/CD | GitHub Actions uses Java 11 instead of Java 21 | `.github/workflows/maven-publish.yml:23` | Build will fail; Java 21 features incompatible with Java 11 | Update `java-version: '21'` in workflow file | 🔴 Open |
+| **CI-002** | 🟠 **High** | CI/CD | CI only triggers on release events, not PRs/pushes | `.github/workflows/maven-publish.yml:7-8` | No continuous integration; PRs can break main | Add `on: [push, pull_request]` triggers | 🔴 Open |
+| **DB-001** | 🟠 **High** | Database | Database module is empty - no Flyway config or migration runner | `database/` | Migrations not automated; manual schema management required | Add Flyway runner config and migration scripts to database module | 🔴 Open |
+| **DOC-001** | 🟠 **High** | Documentation | Docker Compose file referenced but does not exist | `README.md` Getting Started section | Developers cannot run full stack locally | Create `docker-compose.yml` with postgres, redis, api-service, worker-service | 🔴 Open |
+| **SCR-001** | 🟠 **High** | Scripts | `scripts/pre-commit.sh` referenced but does not exist | `CONTRIBUTING.md:12` | No pre-commit validation; code quality gates bypassed | Create `scripts/pre-commit.sh` with lint, test, security scan | 🔴 Open |
+| **SCR-002** | 🟠 **High** | Scripts | `scripts/dev-up.sh` referenced but does not exist | `README.md:314` | Cannot run local dev environment as documented | Create `scripts/dev-up.sh` to spin up services with Docker Compose | 🔴 Open |
+| **IMPL-001** | 🟠 **High** | Implementation | RateLimiterFilter exists but RateLimiterService implementation not found | `api-service/src/main/java/com/openpay/api/filter/RateLimiterFilter.java` | Cannot enforce rate limits; API vulnerable to abuse | Implement token bucket or leaky bucket algorithm with client_rate_limits table | 🔴 Open |
+| **IMPL-002** | 🟠 **High** | Implementation | Circuit breaker table exists but no CircuitBreakerService implementation | `V2__addCallbacks_CircuitBreakers_RateLimiters.sql` | No protection against cascading failures | Implement CircuitBreaker pattern with state machine (CLOSED/OPEN/HALF-OPEN) | 🔴 Open |
+| **IMPL-003** | 🟠 **High** | Implementation | Webhook callbacks table exists but no WebhookService implementation | `V2__addCallbacks_CircuitBreakers_RateLimiters.sql` | Cannot notify merchants of transaction status changes | Implement webhook delivery with exponential backoff retry and DLQ | 🔴 Open |
+| **CFG-004** | 🟡 **Medium** | Configuration | No SSL/TLS enforcement configuration | `api-service/src/main/resources/application.properties` | Data transmitted in plaintext; violates PCI-DSS req 4.1 | Add `server.ssl.enabled=true` with keystore configuration | 🔴 Open |
+| **CFG-005** | 🟡 **Medium** | Configuration | No request timeout configuration | `api-service/` | Requests can hang indefinitely; resource exhaustion risk | Add `spring.mvc.async.request-timeout` and connection timeouts | 🔴 Open |
+| **TEST-001** | 🟡 **Medium** | Testing | Only one test file exists; missing integration and E2E tests | `api-service/src/test/` | Low test coverage; regressions likely | Add Testcontainers for integration tests, Gatling/k6 for performance tests | 🔴 Open |
+| **TEST-002** | 🟡 **Medium** | Testing | No worker service tests | `worker-service/src/test/` | Async processing logic not tested | Add tests for TransactionWorkerConsumer with mocked Redis and DB | 🔴 Open |
+| **VAL-001** | 🟡 **Medium** | Validation | No maximum amount validation on PaymentRequest | `shared-libs/.../PaymentRequest.java` | Could process invalid/abnormally large transactions | Add `@DecimalMax` constraint with reasonable business limit | 🔴 Open |
+| **VAL-002** | 🟡 **Medium** | Validation | No currency field validation | `shared-libs/.../PaymentRequest.java` | Assumes INR only; not multi-currency ready | Add `currency` field with `@NotNull` and validation for supported currencies | 🔴 Open |
+| **LOG-001** | 🟢 **Low** | Logging | No structured logging format (JSON) configured | `api-service/src/main/resources/application.properties` | Hard to parse logs in centralized systems like ELK | Add Logstash encoder or similar JSON logging layout | 🔴 Open |
+| **OBS-001** | 🟢 **Low** | Observability | No Prometheus metrics configuration | `api-service/`, `worker-service/` | Cannot monitor application health and performance | Add Micrometer Prometheus registry and custom business metrics | 🔴 Open |
+| **OBS-002** | 🟢 **Low** | Observability | No distributed tracing (OpenTelemetry/Sleuth) configured | `api-service/`, `worker-service/` | Cannot trace requests across services | Add Spring Cloud Sleuth or OpenTelemetry instrumentation | 🔴 Open |
+| **DEP-001** | 🟢 **Low** | Dependencies | No OWASP dependency check in CI | `.github/workflows/` | Vulnerable dependencies may go unnoticed | Add `dependency-check-maven` plugin to CI pipeline | 🔴 Open |
+| **DOC-002** | 🟢 **Low** | Documentation | No OpenAPI/Swagger configuration visible | `api-service/` | API consumers cannot explore endpoints interactively | Verify `springdoc-openapi` dependency and configuration | 🔴 Open |
+| **ARC-001** | 🟢 **Low** | Architecture | HealthController returns plain text instead of JSON | `api-service/.../HealthController.java` | Inconsistent with REST API standards | Return JSON with status, timestamp, version, dependencies health | 🔴 Open |
+
+---
+
+**Issue Status Legend:**
+- 🔴 **Open**: Issue confirmed, awaiting fix
+- 🟡 **In Progress**: Fix being implemented
+- 🟢 **Resolved**: Fix merged to main
+
+**Severity Legend:**
+- 🔴 **Critical**: Blocks production deployment, security vulnerability, or data loss risk
+- 🟠 **High**: Significant functionality missing or major compliance gap
+- 🟡 **Medium**: Important feature missing or minor compliance issue
+- 🟢 **Low**: Nice-to-have, cosmetic, or minor improvement
+
+---
+
 ## Contributing
 
 | Step                   | Requirement / Control                                                                          |
 | ---------------------- | ---------------------------------------------------------------------------------------------- |
-| **1. Fork & Branch**   | Fork the repo; create a branch: `feature/<topic>` or `fix/<ticket#>` (strict convention).      |
+| **1. Fork & Branch**   | Fork the repo; create a branch: `feature/<topic>` or `fix/<ticket#>` (strict branch convention).      |
 | **2. Local Checks**    | Run `./scripts/pre-commit.sh` (lint, static analysis, unit/integration tests, security scan).  |
 | **3. Pull Request**    | Open a PR to `main`. PRs must pass all CI checks and receive core maintainer review.           |
 | **4. Automated CI/CD** | GitHub Actions enforce lint, test, coverage, and security gates; manual merges are disallowed. |
@@ -394,7 +442,7 @@ See [`CONTRIBUTING.md`](docs/CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](docs/CO
 | Channel                | Purpose                                                                            |
 | ---------------------- | ---------------------------------------------------------------------------------- |
 | **GitHub Issues**      | File bugs, feature requests, or regression reports.                                |
-| **GitHub Discussions** | Architecture Q\&A, RFC proposals, roadmap debate.                                  |
+| **GitHub Discussions** | Architecture Q&A, RFC proposals, roadmap debate.                                  |
 | **Security Contact**   | Report vulnerabilities: `security@flosspay.dev` (GPG key in repo, 24h triage SLA). |
 
 ---
@@ -432,7 +480,7 @@ See [`CONTRIBUTING.md`](docs/CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](docs/CO
 | **License**         | [MIT License](LICENSE)                  |
 | **Project Owner**   | David Grace – Founder & Chief Architect |
 | **Core Maintainer** | David Grace                             |
-|  Product Manager, Branding & Launch Strategy                    | Goutham [@gouthamdev](https://github.com/gouthamrajesh)
+|  Product Manager, Branding & Launch Strategy                    | Goutham [@gouthamdev](https://github.com/gouthamdev)
 
 > **For sponsorship, collaboration, or professional engagement:**
 > Open an Issue or Discussion with your context and intent.
