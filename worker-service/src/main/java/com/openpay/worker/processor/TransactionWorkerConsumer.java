@@ -229,7 +229,7 @@ public class TransactionWorkerConsumer {
 
     // Wrapping the transaction handling processing
 
-    private boolean handleTransaction(Map<Object, Object> payload) {
+    boolean handleTransaction(Map<Object, Object> payload) {
         Long txnId = null;
         try {
             Object txnIdObj = payload.get("txnId");
@@ -249,6 +249,15 @@ public class TransactionWorkerConsumer {
                 return false;
             }
 
+            // Idempotency guard: a prior attempt may have already completed the
+            // UPI call (e.g. the gateway succeeded but a later step threw before
+            // this method could return true). Never re-invoke the gateway for a
+            // txnId that is already completed.
+            if ("completed".equals(TransactionEntity.getStatus())) {
+                log.info("txnId={} already completed; skipping duplicate UPI call", txnId);
+                return true;
+            }
+
             // === Audit wrap for "processing" ===
             // <------- change made: audit before and after status
             String prevStatus = TransactionEntity.getStatus();
@@ -265,19 +274,28 @@ public class TransactionWorkerConsumer {
                     TransactionEntity.getAmount(),
                     txnId);
 
-          // === Audit wrap for "completed"/"failed" ===
-          prevStatus = TransactionEntity.getStatus();
-          if (upiSuccess) {
-              TransactionEntity.setStatus("completed");
-              logAudit(txnId, prevStatus, "completed"); // <------- change made: audit call
-              log.info("Transaction {} completed via UPI", txnId);
-          } else {
-              TransactionEntity.setStatus("failed");
-              logAudit(txnId, prevStatus, "failed"); // <------- change made: audit call
-              log.warn("Transaction {} failed via UPI", txnId);
-          }
-          TransactionEntity.setUpdatedAt(LocalDateTime.now());
-          transactionRepository.save(TransactionEntity);
+            // Once the gateway call has returned, the payment has already been
+            // attempted at NPCI. A failure while persisting the outcome must
+            // never be reported as "false" here, since processWithRetry treats
+            // false as safe-to-retry and would re-invoke the UPI gateway for a
+            // payment that already went through.
+            try {
+                String postStatus = TransactionEntity.getStatus();
+                if (upiSuccess) {
+                    TransactionEntity.setStatus("completed");
+                    logAudit(txnId, postStatus, "completed"); // <------- change made: audit call
+                    log.info("Transaction {} completed via UPI", txnId);
+                } else {
+                    TransactionEntity.setStatus("failed");
+                    logAudit(txnId, postStatus, "failed"); // <------- change made: audit call
+                    log.warn("Transaction {} failed via UPI", txnId);
+                }
+                TransactionEntity.setUpdatedAt(LocalDateTime.now());
+                transactionRepository.save(TransactionEntity);
+            } catch (Exception persistEx) {
+                log.error("Failed to persist outcome for txnId={} after UPI call returned upiSuccess={}: {}",
+                        txnId, upiSuccess, persistEx.getMessage(), persistEx);
+            }
 
             return upiSuccess;
         } catch (Exception e) {
